@@ -24,33 +24,6 @@ int fila;
 char sudoku[9][9];
 
 
-int filas(){
-
-    omp_set_nested(1);
-    omp_set_num_threads(9);
-    int grid[9];
-    int v = 0;
-   #pragma omp parallel for private(grid) schedule(dynamic)
-    for (int i = 0; i < 9; i++){
-        char nums[] = "123456789";
-        char *num;
-        for (num = &nums[0]; *num != '\0'; num++){
-            int nn = 0;
-            int j = 0;
-            while (nn == 0 && j < 9){
-                if (sudoku[i][j] == *num)
-                    nn = 1;
-                j++;
-            }
-            if (nn == 0)
-                v = -1;
-        }
-        printf("En la verificacion de las filas el thread en ejecucion es: %ld \n", syscall(SYS_gettid));
-    }
-    return v;
-}
-
-
 int cols(){   
 
     omp_set_nested(1);
@@ -79,9 +52,38 @@ int cols(){
 }
 
 
+int filas(){
+
+    omp_set_nested(1);
+    omp_set_num_threads(9);
+    int grid[9];
+    int v = 0;
+   #pragma omp parallel for private(grid) schedule(dynamic)
+    for (int i = 0; i < 9; i++){
+        char nums[] = "123456789";
+        char *num;
+        for (num = &nums[0]; *num != '\0'; num++){
+            int nn = 0;
+            int j = 0;
+            while (nn == 0 && j < 9){
+                if (sudoku[i][j] == *num)
+                    nn = 1;
+                j++;
+            }
+            if (nn == 0)
+                v = -1;
+        }
+        printf("En la verificacion de las filas el thread en ejecucion es: %ld \n", syscall(SYS_gettid));
+    }
+    return v;
+}
+
+
+
+
+
 
 int filanums(char t[9][9]){
-
 
     omp_set_nested(1);
     omp_set_num_threads(9);
